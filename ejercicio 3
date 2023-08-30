@@ -13,6 +13,7 @@ métodos vistos en la teoría. // SI SE ORDENA POR PUNTAJE NO PIERDE EL GENERO??
 d. Muestre el código de película con mayor puntaje y el código de película con menor puntaje,
 del vector obtenido en el punto c).
 
+https://codeshare.io/Qn3ARQ
 
 program ejercicio3;
 const
