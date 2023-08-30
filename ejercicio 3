@@ -6,13 +6,135 @@ Implementar un programa que invoque a módulos para cada uno de los siguientes p
 a. Lea los datos de películas, los almacene por orden de llegada y agrupados por código de
 género, y retorne en una estructura de datos adecuada. La lectura finaliza cuando se lee el
 código de la película -1.
-
-1
-
-TALLER DE PROGRAMACIÓN – Módulo Imperativo 2023
 b. Genere y retorne en un vector, para cada género, el código de película con mayor puntaje
-obtenido entre todas las críticas, a partir de la estructura generada en a)..
+obtenido entre todas las críticas, a partir de la estructura generada en a).. // PREGUNTAR //
 c. Ordene los elementos del vector generado en b) por puntaje utilizando alguno de los dos
-métodos vistos en la teoría.
+métodos vistos en la teoría. // SI SE ORDENA POR PUNTAJE NO PIERDE EL GENERO???? PREGUNTAR
 d. Muestre el código de película con mayor puntaje y el código de película con menor puntaje,
 del vector obtenido en el punto c).
+
+
+program ejercicio3;
+const
+ totgeneros = 8
+type 
+ rgeneros = 1..totgeneros;
+ 
+ pelicula = record
+  codpelicula: integer;
+  codgenero: rgeneros;
+  puntaje: real;
+ end;
+ 
+ lista = ^nodo;
+
+ nodo = record
+  dato: pelicula;
+  sig: lista;
+  
+ vectorp = array [rgeneros] of lista;
+ vectorMax = array [rgeneros] of pelicula;
+  
+procedure leer (var p:pelicula);
+begin
+ writeln ('ingresar codigo de pelicula'); readln (p.codpelicula);
+ if (p.codpelicula <> -1) then begin
+  writeln ('ingresar codigo de genero'); readln (p.codgenero);
+  writeln ('ingresar puntaje'); readln (p.puntaje);
+ end;
+end;
+
+procedure inicializar (var v: vectorp);
+var
+ i: rgeneros;
+begin
+ for i:= 1 to totgeneros do
+  v[i]:= nil;
+end;
+
+procedure agregarAtras (var l, ult: lista; p:pelicula);
+var
+ nuevo: lista;
+begin
+ new (nuevo);
+ nuevo^.dato:= p;
+ nuevo^.sig:= nil
+ if (l = nil) then
+  l:= nuevo
+ else
+  ult^.sig:= nuevo
+ ult:= nuevo
+end;
+
+procedure cargarVector (var v:vectorp);
+var
+ ult:lista;
+ p:pelicula;
+begin
+ leer (p)
+ while (p.codpelicula <> -1) do begin
+  agregarAtras (v[p.codgenero],, ult, p);
+  leer (p)
+ end;
+end;
+
+procedure maximo (var maxpelicula: pelicula; aux:pelicula );
+begin
+ if (aux.puntaje > maxpelicula. puntaje) then begin
+  maxpelicula:= aux;
+ end;
+end;
+
+procedure nuevoVector (var vnuevo: vectorMax; v: vectorp);
+var
+ i, actual: rgeneros;;
+ maxpelicula, aux: pelicula;
+begin
+ for i:= 1 to totgeneros do
+  actual:= v[i]^.dato.codgenero;
+  maxpelicula.puntaje:= -1;
+  while (v[i] <> nil) and (v[i]^.dato.codgenero = actual) do begin
+   aux:= v[i]^.dato;
+   maximo (maxpelicula, aux); 
+   v[i]:= v[i]^.sig;
+  end;
+  vnuevo[i]:= maxpelicula;
+ end;
+end;
+  
+procedure ordInsercion (var v:vectorMax);
+var
+ i, j: rgeneros;
+ actual: pelicula;
+begin
+ for i:= 2 to diml do begin
+  actual:= v[i];
+  j:= j-1;
+  while (j > 0) and (v[j].puntaje > actual.puntaje) do begin
+   v[j+1]:= v[j];
+   j:= j-1;
+  end;
+  v[j+1]:= actual;
+ end;
+end;
+
+procedure mostrarPuntajes (v: vectorMax);
+begin
+ writeln ('EL CODIGO DE LA PELICULA CON MENOR PUNTAJE ES', v[1].puntaje);
+ writeln ('EL CODIGO DE LA PELICULA CON MAYOR PUNTAJE ES', v[totgeneros].puntaje);
+end;
+
+var
+ vectorPelis: vectorp;
+ vectorPuntajes: vectorMax;
+begin
+ 
+ inicializar (vectorPelis);
+ cargarVector (vectorPelis);
+ 
+ nuevoVector (vectorPuntajes, vectorPelis);
+ ordInsercion (vectorPuntajes);
+ 
+ mostrarPuntajes (vectorPuntajes);
+ 
+end.
