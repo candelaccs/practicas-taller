@@ -1,4 +1,4 @@
-2.- El administrador de un edificio de oficinas cuenta, en papel, con la información del pago de
+2. El administrador de un edificio de oficinas cuenta, en papel, con la información del pago de
 las expensas de dichas oficinas.
 Implementar un programa que invoque a módulos para cada uno de los siguientes puntos:
 a. Genere un vector, sin orden, con a lo sumo las 300 oficinas que administra. De cada oficina
