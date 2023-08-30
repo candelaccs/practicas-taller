@@ -1,0 +1,177 @@
+program practiaca1ej1; 
+const
+  maxprods = 50;
+  maxdia = 31; 
+  maxcod = 15;
+  maxcant = 99;
+type
+  rmaxprods = 1..maxprods
+  rdias = 0..maxdia;
+  rmaxcod = 1..maxcod;
+  rvendidos= 1..maxcant;
+  
+  venta = record
+   dia: rdias;
+   codigo: rcodigos;
+   cantidad: rvendidos;
+  end;
+  
+  vecventas = array [rmaxprods] of venta;
+  
+  lista = nodo^
+  nodo = record
+   dato: venta
+   sig: lista
+  end;
+  
+procedure leer (var v: ventas)
+begin
+ readln (v.dia);
+ if (v.dia <> 0) then begin
+  randomize
+  v.codigo:= random (16);
+  readln (v.cantidad);
+ end;
+ 
+procedure cargarvector (var vec: vecventas; var diml: rmaxprods);
+var
+ v: venta;
+begin
+  leer (v)
+  while (v.dia <> 0) and (diml < maxprods) do begin
+   diml:= diml+1;
+   vec [diml]:= v;
+   leer (v);
+  end;
+end;
+
+procedure imprimirvector (vec: vecventas; diml:rmaxprods );
+var
+ i:rmaxprods;
+begin
+ for i:= 1 to diml do begin
+  writeln (vec[i].dia);
+  writeln (vec[i].codigo);
+  writeln (vec[i].cantidad);
+ end;
+end;
+
+procedure ordenarVector (var vec: vecventas; diml: rmaxprods);
+var
+ i, j, k: rmaxprods;
+ aux: venta;
+begin
+ for i:= 1 to diml-1 do begin
+  k:= i;
+  for j:= i+1 to diml do
+   if vec[j].codigo < vec[k].codigo then
+    k:= j;
+  aux:= vec[k];
+  vec[k]:= v [i];
+  vec[i]:= aux;
+ end;
+end;
+
+function buscarInferior (v: vecventas; diml: rmaxprods; codigo: rmaxcod): rmaxprods;
+var
+ pos: rmaxcod;
+begin
+ pos:= 1;
+ while (pos <= diml) and (codigo > v[pos].codigo) do 
+  pos:= pos+1;
+ if (pos > diml) then
+  buscarInferior:= 0
+ else
+  buscarInferior:= pos;
+end;
+
+function buscarSuperior (v: vecventas: diml: rmaxprods; codigo: rmaxcod; pos: rmaxprds): rmaxprods;
+begin
+ while (pos <= diml) and (codigo >= v[pos].codigo) do
+  pos:= pos+1;
+ if (pos > diml) then
+   buscarSuperior:= diml
+ else
+  buscarSuperior:= pos-1;
+end;
+
+procedure eliminar (var v:vecventas; var diml: rmaxprods; codigo1, codigo2: rmaxcod);
+var
+ posInferior, posSuperior, i, contador: rmaxprods;
+begin
+  posInferior:= buscarInferior (v, diml, codigo1);
+  if (posInferior <> 0) then begin
+    posSuperior:= buscarSuperior (v, diml, codigo2, posInferior);
+    contador:= 0
+    for i:= posInferior to posSuperior do
+     contador:= contador+1;
+    for i:= posSuperior+1 to diml do
+     v[i-contador]:= v[i];
+    diml:= diml-contador;
+  end;
+end; 
+     
+function cumple (codigo: rmaxcod): boolean
+begin
+ cumple:= (codigo mod 2 = 0);
+end;
+ 
+procedure agregarad (var l: lista; v:venta);
+var
+ nuevo: lista;
+begin
+ new (nuevo)
+ nuevo^.dato:= v;
+ nuevo^.sig:= l;
+ l:= nuevo;
+end;
+
+procedure crearLista (v: vecventas; diml: rmaxprods, var l:ista);
+var
+ i: rmaxprods;
+begin
+ l:= nil;
+ for i:= diml downto 1 do begin
+  if (cumple (v[i].codigo)) then
+   agregarad (l,v[i]);
+ end;
+end;
+
+procedure imprimirLista (l: lista);
+var
+ aux: venta;
+begin
+ while (l <> nil) do begin
+  aux:= l^.dato
+  writeln (aux.dia);
+  writeln (aux.codigo);
+  writeln (aux.cantidad);
+  l:= l^.sig;
+ end;
+end;
+  
+var
+ diml: rmaxprods;
+ l:lista;
+ v: vecventas
+ codigo1, codigo2: rmaxcod;
+
+begin
+ 
+ cargarvector (v, diml);
+ writeln ('se muestra vector cargado');
+ imprimirvector (v, diml);
+ ordenarVector (v,diml);
+ writeln ('se muestra el vector ordenado');
+ imprimirvector (v,diml);
+ writeln ('ingrese primer codigo a eliminar'); readln (codigo1);
+ writeln ('ingrese el segundo codigo a eliminar'); readln (codigo2);
+ eliminar (v,diml, codigo1, codigo2);
+ writeln ('se muestra el vector luego de eliminar');
+ imprimirvector (v,diml);
+ crearLista (v, diml, l);
+ writeln ('se muestra la lista generada');
+ imprimirLista (l);
+ 
+end.
+ 
