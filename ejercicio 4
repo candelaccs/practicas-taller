@@ -13,3 +13,156 @@ métodos vistos en la teoría.
 e. Muestre los precios del vector resultante del punto d).
 f. Calcule el promedio de los precios del vector resultante del punto d).
 
+
+program ejercicio4;
+const 
+  codmax = 8;
+  rubrotres = 30
+type
+
+  rubro = 1..codmax;
+  rangotres = 1..rubrotres;
+  
+  producto = record
+    codproduc: integer;
+    codrubro : rubro;
+    precio: real;
+  end;
+  
+  
+  lista =^nodo;
+  
+  nodo = record
+    dato:producto; 
+    sig: lista;
+  end;
+ 
+ vprincipal = array [rubro] of lista; 
+ 
+ vectortres = array[rangotres] of producto;
+ 
+ 
+procedure leerproducto(var p :producto)
+begin
+  read(p.codproduc);
+  read(p.codrubro);
+  read(p.precio);
+end;
+
+
+procedure insertarord (var l:lista; p: producto);
+var
+  act, ant, nuevo: lista;
+begin
+  new (nuevo)
+  nuevo^.dato:= p;
+  act:= l
+  ant:= l;
+  while (act <> nil) and (p.codproduc > act^.dato.codproduc) do begin
+   ant:= act
+   act:= act^.sig;
+  end;
+  if (act = ant) then begin
+   l:= nuevo;
+  else
+   ant^.sig:= nuevo;
+   nuevo^.sig:= act;
+end;
+
+
+procedure inicializar (var v: vprincipal);
+var 
+ i: rubro;
+begin
+  for i:= 1 to codmax do
+    v[i]:= nil;
+end;
+
+procedure cargarestructura(var v: vprincipal)
+var
+  p:persona;
+begin
+  leerproducto(p);
+  while(p.precio<> 0)do
+    begin
+      insertarord(v[p.codrubro], p);
+      leerproducto(p);
+    end;
+end;
+
+procedure mostrar_codigos (v:vprincipal);
+var 
+ i: rubro;
+begin
+  
+  for i:= 1 to codmax do begin
+    writeln ('los codigos del rubro', i, 'son: ');
+    while (v[i] <> nil) do begin
+      writeln ('el codigo es ', v[i]^.dato.codproduc);
+      v[i]:= v[i]^.sig;
+    end;
+  end;
+end;
+
+
+
+procedure armarvector(l: lista; var v3; vectortres; var diml : integer)
+  
+begin
+  while (l<> nil) and (diml<30) do 
+    begin
+     diml;= diml+1;
+     v3[diml]:=l^.dato;
+     l:= l^.sig;
+    end;
+end;
+
+procedure ordInsercion (var v3: vector3; diml: rangotres);
+var
+ i, j: rangotres;
+ actual: producto;
+begin
+ for i:= 2 to diml do begin
+  actual:= v3[i];
+  j:= j-1;
+  while (j > 0) and (v[j].precio > actual.precio) do begin
+   v[j+1]:= v[j];
+   j:= j-1;
+  end;
+  v[j+1]:= actual;
+ end;
+end;
+
+procedure imprimirVecRangoTres (v3: vector3; diml: rangotres);
+var
+ i: rangotres;
+begin
+ for i:= 1 to diml do 
+  writeln ('el precio de este producto es ', v3 [i]. precio);
+end;
+
+var
+  v: vprincipal
+  diml, i: rangotres;
+  v3: vectortres;
+  sumadora: real;
+
+begin
+  inicializar(v);
+  cargarestructura(v);
+  
+  mostrar_codigos(v);
+  
+  armarvector(v[3], v3, diml);
+  ordInsercion (v3,diml);
+  imprimirVecRangoTres (v3,diml);
+  
+  sumadora:=0;
+  for i:= 1 to diml do begin
+    writeln ('el precio de este producto es ', v3 [i]. precio);     // preguntar si esta bien el for //
+    sumadora:= sumadora + v3[i].precio;
+  end;
+  
+  writeln ('el promedio de los precios del vector es', sumadora/diml);
+  
+end.
