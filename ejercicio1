@@ -115,16 +115,14 @@ end;
 
 procedure eliminar (var v:vecventas; var diml: rmaxprods; codigo1, codigo2: rmaxcod);
 var
- posInferior, posSuperior, i, contador: rmaxprods;
+ posInferior, posSuperior, i, aux: rmaxprods;
 begin
   posInferior:= buscarInferior (v, diml, codigo1);
   if (posInferior <> 0) then begin
     posSuperior:= buscarSuperior (v, diml, codigo2, posInferior);
-    contador:= 0
-    for i:= posInferior to posSuperior do
-     contador:= contador+1;
-    for i:= posSuperior+1 to diml do
-     v[i-contador]:= v[i];
+    aux:= (posSuperior - posInferior)+1: // +1 porque tiene que borrar INCLUSIVE posInferior y posSuperior //
+    for i:= posSuperior+1 to diml do // +1 asi empieza guardando el elemento siguiente // 
+      v[i-aux]:= v[i];
     diml:= diml-contador;
   end;
 end; 
