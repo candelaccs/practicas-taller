@@ -1,0 +1,156 @@
+program correo;
+
+type  rdia = 1..31;
+
+ 
+ envio = record
+  codcliente: integer;
+  dia: rdia;
+  codpostal: integer;
+  peso: real;
+ end;
+ 
+ almacenar = record
+  codcliente: integer;
+  dia: rdia;
+  peso:real;
+ end;
+  
+ lista = ^nodo;
+ nodo = record
+  dato: almacenar;
+  sig: lista;
+ end;
+ 
+ registro = record
+  codpostal: integer;
+  lista: lista;
+ end;
+ 
+ arbol = ^nod;
+ nod = record
+  dato: registro;
+  hi: arbol;
+  hd: arbol;
+ end;
+ 
+procedure incisoA (var a:arbol);
+
+ procedure leer (var e: envio);
+ begin
+  
+  writeln ('ingrese el peso del paquete');
+  readln (e.peso);
+  if (e. peso <> 0) then begin
+   writeln ('ingrese el codigo postal');
+   readln (e.codpostal);
+   writeln ('ingrese dia');
+   readln (e.dia);
+   writeln ('ingrese codigo de cliente');
+   readln (e.codcliente);
+  end;
+ end;
+ 
+ procedure armarLista (var l: lista; e: envio);
+ 
+  procedure armar (var a:almacenar; e:envio);
+  begin
+   a.codcliente:= e.codcliente;
+   a.dia:= e.dia;
+   a.peso:= e.peso;
+  end;
+
+ var
+  nue: lista;
+  alm: almacenar;
+ begin
+  
+  new (nue);
+  armar (alm, e);
+  nue^.dato:= alm;
+  nue^.sig:= l;
+  l:= nue;
+ end;
+ 
+ procedure armarArbol (var a: arbol; e: envio);
+ begin
+  if (a = nil) then begin
+   new (a);
+   a^.dato.codpostal:= e.codpostal;
+   a^.dato.lista:= nil;
+   armarLista (a^.dato.lista, e);
+   a^.hi:= nil;
+   a^.hd:= nil;
+  end
+  else 
+   if (a^.dato.codpostal = e.codpostal) then
+    armarLista (a^.dato.lista, e)
+   else
+    if (a^.dato.codpostal > e.codpostal) then
+     armarArbol (a^.hi, e)
+    else
+     armarArbol (a^.hd, e);
+ end;
+   
+  
+var
+ e:envio;
+begin
+ 
+ a:= nil;
+ writeln ('a continuacion ingrese los datos');
+ writeln ('-----');
+ leer (e);
+ while (e.peso <> 0) do begin
+  armarArbol (a,e);
+  writeln ('-------------');
+  leer (e);
+ end;
+ 
+end;
+
+
+procedure incisoB (a: arbol; var l: lista);
+ 
+ procedure devolverLista (a: arbol; var l: lista; codigo: integer);
+ begin
+  
+  if (a = nil) then
+   l:= nil
+  else
+   if (a^.dato.codpostal = codigo) then
+    l:= a^.dato.lista
+   else
+    if (a^.dato.codpostal > codigo) then
+     devolverLista (a^.hi,l,codigo)
+    else
+     devolverLista (a^.hd,l,codigo);
+ end;
+ 
+var
+ codigo: integer;
+begin
+ 
+ writeln ('ingrese un codigo postal');
+ readln (codigo);
+ 
+ if (a = nil) then
+  writeln ('la lista esta vacia')
+ else
+  devolverLista (a,l,codigo);
+  
+end;
+ 
+procedure incisoC (l: lista
+
+var // pp //
+ a: arbol;
+ l: lista;
+begin
+ 
+ incisoA (a);
+ incisoB (a,l);
+ incisoC (l);
+end. 
+  
+  
